@@ -8,16 +8,11 @@ import { CodebaseProvider } from './tree-view';
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "unison-ui" is now active!');
 
-	let disposable = vscode.window.registerTreeDataProvider(
-		'codebase',
-		new CodebaseProvider()
-	);
-
-	vscode.window.createTreeView('codebase', {
+	const treeView = vscode.window.createTreeView('codebase', {
 		treeDataProvider: new CodebaseProvider(),
 	});
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push({ dispose: treeView.dispose });
 }
 
 // this method is called when your extension is deactivated

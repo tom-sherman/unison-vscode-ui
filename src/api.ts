@@ -23,7 +23,7 @@ export type NamespaceChild =
 			};
 	  };
 
-const apiRoot = 'http://127.0.0.1:51599/myWRbTIgJJMpwv+a1W4V24KGru27iw2l/api';
+const apiRoot = 'http://127.0.0.1:53404/vVr1STfv3IBpl7VmVC6JwCzKz60CYBbC/api';
 
 export function list(namespace: string): Promise<NamespaceListing> {
 	const queryParams = `?namespace=${namespace}`;
