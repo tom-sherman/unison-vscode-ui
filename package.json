@@ -10,15 +10,15 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:unison-ui.helloWorld",
+		"onCommand:unison-ui.configureCodebase",
 		"onView:codebase"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "unison-ui.helloWorld",
-				"title": "Hello World"
+				"command": "unison-ui.configureCodebase",
+				"title": "Configure UCM Codebase"
 			}
 		],
 		"views": {
@@ -28,7 +28,13 @@
 					"name": "Unison Codebase"
 				}
 			]
-		}
+		},
+		"viewsWelcome": [
+			{
+				"view": "codebase",
+				"contents": "[Configure Codebase](command:unison-ui.configureCodebase)"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",

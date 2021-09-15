@@ -4,6 +4,8 @@ import * as API from './api';
 export class CodebaseProvider
 	implements vscode.TreeDataProvider<vscode.TreeItem>
 {
+	constructor(private readonly apiClient: API.ApiClient) {}
+
 	getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
 		return element;
 	}
@@ -12,7 +14,7 @@ export class CodebaseProvider
 		element?: CodebaseTreeviewChild
 	): Promise<vscode.TreeItem[]> {
 		const namespace = element ? `.${element?.namespaceListingFQN}` : '.';
-		const listing = await API.list(namespace);
+		const listing = await this.apiClient.list(namespace);
 		return listing.namespaceListingChildren.map((child) =>
 			mapListingChildToTreeItem(child, listing)
 		);

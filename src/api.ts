@@ -23,12 +23,18 @@ export type NamespaceChild =
 			};
 	  };
 
-const apiRoot = 'http://127.0.0.1:53404/vVr1STfv3IBpl7VmVC6JwCzKz60CYBbC/api';
+export interface ApiClient {
+	list: (namespace: string) => Promise<NamespaceListing>;
+}
 
-export function list(namespace: string): Promise<NamespaceListing> {
-	const queryParams = `?namespace=${namespace}`;
-	return fetch(`${apiRoot}/list${queryParams}`).then((res) => {
-		console.log(namespace);
-		return res.json() as Promise<NamespaceListing>;
-	});
+export function createApiClient(apiRoot: string): ApiClient {
+	return {
+		list: (namespace: string): Promise<NamespaceListing> => {
+			const queryParams = `?namespace=${namespace}`;
+			return fetch(`${apiRoot}/list${queryParams}`).then((res) => {
+				console.log(namespace);
+				return res.json() as Promise<NamespaceListing>;
+			});
+		},
+	};
 }
