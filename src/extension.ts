@@ -7,7 +7,7 @@ import { CodebaseProvider } from './tree-view';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Congratulations, your extension "unison-ui" is now active!');
+	let codebaseProvider: null | CodebaseProvider = null;
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand(
@@ -15,6 +15,20 @@ export function activate(context: vscode.ExtensionContext) {
 			configureCodebaseCommand
 		)
 	);
+	context.subscriptions.push(
+		vscode.commands.registerCommand(
+			'unison-ui.refreshCodebase',
+			refreshCodbeaseCommand
+		)
+	);
+
+	async function refreshCodbeaseCommand() {
+		if (codebaseProvider) {
+			codebaseProvider.refresh();
+		} else {
+			vscode.window.showErrorMessage('Codebase not yet configured.');
+		}
+	}
 
 	async function configureCodebaseCommand() {
 		const unisonUrl = await vscode.window.showInputBox({
@@ -28,8 +42,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const apiClient = createApiClient(unisonUrl);
 
+		codebaseProvider = new CodebaseProvider(apiClient);
+
 		const treeView = vscode.window.createTreeView('codebase', {
-			treeDataProvider: new CodebaseProvider(apiClient),
+			treeDataProvider: codebaseProvider,
 		});
 
 		context.subscriptions.push(treeView);

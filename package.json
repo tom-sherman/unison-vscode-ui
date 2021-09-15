@@ -19,6 +19,10 @@
 			{
 				"command": "unison-ui.configureCodebase",
 				"title": "Configure UCM Codebase"
+			},
+			{
+				"command": "unison-ui.refreshCodebase",
+				"title": "Refresh UCM Codebase"
 			}
 		],
 		"views": {
@@ -41,6 +45,15 @@
 					"id": "unison",
 					"title": "Unison",
 					"icon": "resources/unison-logo.png"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "unison-ui.refreshCodebase",
+					"when": "view == codebase",
+					"group": "navigation"
 				}
 			]
 		}

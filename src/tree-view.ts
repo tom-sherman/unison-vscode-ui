@@ -4,7 +4,20 @@ import * as API from './api';
 export class CodebaseProvider
 	implements vscode.TreeDataProvider<vscode.TreeItem>
 {
+	_onDidChangeTreeData: vscode.EventEmitter<
+		CodebaseTreeviewChild | undefined | null | void
+	> = new vscode.EventEmitter<
+		CodebaseTreeviewChild | undefined | null | void
+	>();
+	onDidChangeTreeData: vscode.Event<
+		CodebaseTreeviewChild | undefined | null | void
+	> = this._onDidChangeTreeData.event;
+
 	constructor(private readonly apiClient: API.ApiClient) {}
+
+	refresh(): void {
+		this._onDidChangeTreeData.fire();
+	}
 
 	getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
 		return element;
