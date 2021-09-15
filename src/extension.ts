@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 		treeDataProvider: new CodebaseProvider(),
 	});
 
-	context.subscriptions.push({ dispose: treeView.dispose });
+	context.subscriptions.push(treeView);
 }
 
 // this method is called when your extension is deactivated
