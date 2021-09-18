@@ -1,13 +1,14 @@
 {
 	"name": "unison-ui",
-	"displayName": "unison-ui",
+	"displayName": "Unison",
 	"description": "Unison UI",
+	"publisher": "TomSherman",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.60.0"
 	},
 	"categories": [
-		"Other"
+		"Programming Languages"
 	],
 	"activationEvents": [
 		"onCommand:unison-ui.configureCodebase",
@@ -82,11 +83,16 @@
 		"prettier": "^2.3.2",
 		"ts-loader": "^9.2.2",
 		"typescript": "^4.3.2",
+		"vsce": "^1.99.0",
 		"vscode-test": "^1.5.2",
 		"webpack": "^5.38.1",
 		"webpack-cli": "^4.7.0"
 	},
 	"dependencies": {
 		"node-fetch": "^3.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tom-sherman/unison-vscode-ui.git"
 	}
 }
