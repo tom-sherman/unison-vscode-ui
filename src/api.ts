@@ -20,6 +20,21 @@ export type NamespaceChild =
 			contents: {
 				termHash: string;
 				termName: string;
+				termTag: string;
+			};
+	  }
+	| {
+			tag: 'TypeObject';
+			contents: {
+				typeHash: string;
+				typeName: string;
+				typeTag: string;
+			};
+	  }
+	| {
+			tag: 'PatchObject';
+			contents: {
+				patchName: string;
 			};
 	  };
 
