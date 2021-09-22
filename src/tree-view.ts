@@ -1,3 +1,4 @@
+import path = require('path');
 import * as vscode from 'vscode';
 import * as API from './api';
 
@@ -74,6 +75,10 @@ class CodebaseTreeviewChild extends vscode.TreeItem {
 		);
 
 		this.id = getNamespaceChildId(unisonChild);
+		const iconName = getNamespaceChildIconName(unisonChild);
+		if (iconName) {
+			this.iconPath = path.join(__filename, '..', '..', 'resources', iconName);
+		}
 	}
 }
 
@@ -91,4 +96,34 @@ function getNamespaceChildId(child: API.NamespaceChild): string {
 		case 'PatchObject':
 			throw new Error('Id is not implemented for PatchObject');
 	}
+}
+
+function getNamespaceChildIconName(child: API.NamespaceChild): string | null {
+	if (child.tag === 'PatchObject') {
+		return 'icon-patch.svg';
+	}
+
+	if (child.tag === 'TypeObject') {
+		switch (child.contents.typeTag) {
+			case 'Ability':
+				return 'icon-ability.svg';
+			case 'Data':
+				return 'icon-type.svg';
+			default:
+				return null;
+		}
+	}
+
+	if (child.tag === 'TermObject') {
+		switch (child.contents.termTag) {
+			case 'Doc':
+				return 'icon-document.svg';
+			case 'Test':
+				return 'icon-checkmark.svg';
+			default:
+				return 'icon-term.svg';
+		}
+	}
+
+	return null;
 }
