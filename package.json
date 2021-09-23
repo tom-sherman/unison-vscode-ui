@@ -3,7 +3,7 @@
 	"displayName": "Unison",
 	"description": "Unison UI",
 	"publisher": "TomSherman",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.60.0"
 	},
