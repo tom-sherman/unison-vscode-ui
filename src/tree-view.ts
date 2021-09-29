@@ -36,8 +36,8 @@ export class CodebaseProvider
 }
 
 const mapListingChildToTreeItem = (
-	child: API.NamespaceChild,
-	listing: API.NamespaceListing
+	child: API.TNamespaceChild,
+	listing: API.TNamespaceListing
 ): CodebaseTreeviewChild | null => {
 	switch (child.tag) {
 		case 'Subnamespace':
@@ -64,7 +64,7 @@ const mapListingChildToTreeItem = (
 class CodebaseTreeviewChild extends vscode.TreeItem {
 	constructor(
 		public readonly label: string,
-		public readonly unisonChild: API.NamespaceChild,
+		public readonly unisonChild: API.TNamespaceChild,
 		public readonly namespaceListingFQN?: string
 	) {
 		super(
@@ -82,7 +82,7 @@ class CodebaseTreeviewChild extends vscode.TreeItem {
 	}
 }
 
-function getNamespaceChildId(child: API.NamespaceChild): string {
+function getNamespaceChildId(child: API.TNamespaceChild): string {
 	switch (child.tag) {
 		case 'Subnamespace':
 			return child.contents.namespaceHash;
@@ -98,7 +98,7 @@ function getNamespaceChildId(child: API.NamespaceChild): string {
 	}
 }
 
-function getNamespaceChildIconName(child: API.NamespaceChild): string | null {
+function getNamespaceChildIconName(child: API.TNamespaceChild): string | null {
 	if (child.tag === 'PatchObject') {
 		return 'icon-patch.svg';
 	}
