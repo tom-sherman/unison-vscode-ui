@@ -58,7 +58,18 @@
 					"group": "navigation"
 				}
 			]
-		}
+		},
+		"configuration": [
+			{
+				"title": "Unison UI",
+				"properties": {
+					"unison-ui.apiBaseUrl": {
+						"type": "string",
+						"description": "The base URL of the currently running UCM instance API."
+					}
+				}
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
