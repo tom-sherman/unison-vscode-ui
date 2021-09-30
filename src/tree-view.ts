@@ -1,9 +1,10 @@
+import { elem } from 'fp-ts/lib/Option';
 import path = require('path');
 import * as vscode from 'vscode';
 import * as API from './api';
 
 export class CodebaseProvider
-	implements vscode.TreeDataProvider<vscode.TreeItem>
+	implements vscode.TreeDataProvider<CodebaseTreeviewChild>
 {
 	_onDidChangeTreeData: vscode.EventEmitter<
 		CodebaseTreeviewChild | undefined | null | void
@@ -20,13 +21,50 @@ export class CodebaseProvider
 		this._onDidChangeTreeData.fire();
 	}
 
-	getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
+	async getTreeItem(
+		element: CodebaseTreeviewChild
+	): Promise<CodebaseTreeviewChild> {
 		return element;
+	}
+
+	async resolveTreeItem(
+		item: vscode.TreeItem,
+		element: CodebaseTreeviewChild
+	): Promise<vscode.TreeItem> {
+		if (
+			element.unisonChild.tag === 'TermObject' ||
+			element.unisonChild.tag === 'TypeObject'
+		) {
+			const name =
+				element.unisonChild.tag === 'TermObject'
+					? element.unisonChild.contents.termHash
+					: element.unisonChild.contents.typeHash;
+
+			const definition = await this.apiClient.getDefinition({
+				names: name,
+			});
+
+			const signatureTokens =
+				definition.termDefinitions[name]?.signature ??
+				definition.typeDefinitions[name]?.typeDefinition.contents;
+
+			if (signatureTokens) {
+				const typeDefinition = signatureTokens
+					.map((token) => token.segment)
+					.join('');
+
+				item.tooltip = new vscode.MarkdownString(
+					`\`\`\`\n${typeDefinition}\n\`\`\``
+				);
+			}
+		}
+
+		return item;
 	}
 
 	async getChildren(
 		element?: CodebaseTreeviewChild
-	): Promise<vscode.TreeItem[]> {
+	): Promise<CodebaseTreeviewChild[]> {
 		const namespace = element ? `.${element?.namespaceListingFQN}` : '.';
 		const listing = await this.apiClient.list(namespace);
 		return listing.namespaceListingChildren
