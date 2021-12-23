@@ -52,7 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	async function configureCodebaseCommand() {
 		const unisonUrl = await vscode.window.showInputBox({
-			title: 'Enter UCM URLssssss',
+			title: 'Enter UCM URL',
 		});
 
 		if (unisonUrl === undefined) {
