@@ -2,9 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { interpret, Interpreter } from 'xstate';
-import { createApiClient } from './api';
 import { Context, createExtensionMachine, Event } from './state/extension';
-import { CodebaseProvider } from './tree-view';
 
 let service: null | Interpreter<
 	Context,

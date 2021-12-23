@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Actor, assign, createMachine, send } from 'xstate';
+import { Actor, assign, createMachine } from 'xstate';
 import { createApiClient } from '../api';
 import { CodebaseProvider } from '../tree-view';
 import { assertEventType } from './util';
