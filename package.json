@@ -108,7 +108,8 @@
 	"dependencies": {
 		"fp-ts": "^2.11.1",
 		"io-ts": "^2.2.16",
-		"node-fetch": "^3.0.0"
+		"node-fetch": "^3.0.0",
+		"xstate": "^4.26.1"
 	},
 	"repository": {
 		"type": "git",

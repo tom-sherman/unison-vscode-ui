@@ -1,69 +1,56 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { interpret, Interpreter } from 'xstate';
 import { createApiClient } from './api';
+import { Context, createExtensionMachine, Event } from './state/extension';
 import { CodebaseProvider } from './tree-view';
 
-const BASE_URL_CONFIG_NAME = 'unison-ui.apiBaseUrl';
+let service: null | Interpreter<
+	Context,
+	any,
+	Event,
+	{
+		value: any;
+		context: Context;
+	}
+> = null;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	let codebaseProvider: null | CodebaseProvider = null;
-	function setupCodebaseProvider(unisonUrl: string) {
-		const apiClient = createApiClient(unisonUrl);
+	const machine = createExtensionMachine({
+		context,
+		workspaceConfig: vscode.workspace.getConfiguration(),
+	});
 
-		codebaseProvider = new CodebaseProvider(apiClient);
+	service = interpret(machine)
+		.onTransition((state) => {
+			console.log('Entere state: ', state.value);
 
-		const treeView = vscode.window.createTreeView('codebase', {
-			treeDataProvider: codebaseProvider,
-		});
+			// Doing a mutable dance here because context.subscriptions is readonly and I'm not sure if re-assignment would break something
+			context.subscriptions.splice(0, context.subscriptions.length);
+			state.context.subscriptions.forEach((subscription) => {
+				context.subscriptions.push(subscription);
+			});
+		})
+		.start();
 
-		context.subscriptions.push(treeView);
-	}
-
-	const configuration = vscode.workspace.getConfiguration();
-	const savedUnisonUrl = configuration.get<string>(BASE_URL_CONFIG_NAME);
-
-	if (savedUnisonUrl) {
-		setupCodebaseProvider(savedUnisonUrl);
-	}
+	service.send('ACTIVATE');
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand(
-			'unison-ui.configureCodebase',
-			configureCodebaseCommand
+		vscode.commands.registerCommand('unison-ui.configureCodebase', () =>
+			service!.send('CONFIGURE')
 		)
 	);
 	context.subscriptions.push(
-		vscode.commands.registerCommand(
-			'unison-ui.refreshCodebase',
-			refreshCodbeaseCommand
+		vscode.commands.registerCommand('unison-ui.refreshCodebase', () =>
+			service!.send('REFRESH')
 		)
 	);
-
-	async function refreshCodbeaseCommand() {
-		if (codebaseProvider) {
-			codebaseProvider.refresh();
-		} else {
-			vscode.window.showErrorMessage('Codebase not yet configured.');
-		}
-	}
-
-	async function configureCodebaseCommand() {
-		const unisonUrl = await vscode.window.showInputBox({
-			title: 'Enter UCM URL',
-		});
-
-		if (unisonUrl === undefined) {
-			vscode.window.showErrorMessage('Please enter a UCM URL.');
-			return;
-		}
-
-		setupCodebaseProvider(unisonUrl);
-		await configuration.update(BASE_URL_CONFIG_NAME, unisonUrl);
-	}
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+	service?.stop();
+}
