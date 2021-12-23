@@ -20,11 +20,13 @@
 		"commands": [
 			{
 				"command": "unison-ui.configureCodebase",
-				"title": "Configure UCM Codebase"
+				"title": "Configure UCM Codebase",
+				"icon": "$(settings-gear)"
 			},
 			{
 				"command": "unison-ui.refreshCodebase",
-				"title": "Refresh UCM Codebase"
+				"title": "Refresh UCM Codebase",
+				"icon": "$(refresh)"
 			}
 		],
 		"views": {
@@ -52,6 +54,11 @@
 		},
 		"menus": {
 			"view/title": [
+				{
+					"command": "unison-ui.configureCodebase",
+					"when": "view == codebase",
+					"group": "navigation"
+				},
 				{
 					"command": "unison-ui.refreshCodebase",
 					"when": "view == codebase",
