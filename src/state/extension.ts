@@ -95,7 +95,10 @@ export const createExtensionMachine = ({
 				},
 				setting_up: {
 					entry: 'setup',
-					always: 'configured',
+					invoke: {
+						src: 'persistBaseUrl',
+						onDone: 'configured',
+					},
 				},
 				configured: {
 					on: {
@@ -138,6 +141,17 @@ export const createExtensionMachine = ({
 					}
 
 					return { baseUrl: unisonUrl };
+				},
+				persistBaseUrl: async (_, event) => {
+					assertEventType(event, [
+						'done.invoke.getBaseUrlFromWorkspaceConfig',
+						'done.invoke.getBaseUrlFromUser',
+					]);
+
+					await workspaceConfig.update(
+						BASE_URL_CONFIG_NAME,
+						event.data.baseUrl
+					);
 				},
 			},
 			actions: {
