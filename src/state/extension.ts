@@ -36,7 +36,6 @@ export type Event =
 
 interface MachineDependencies {
 	workspaceConfig: vscode.WorkspaceConfiguration;
-	context: vscode.ExtensionContext;
 }
 
 export const createExtensionMachine = ({

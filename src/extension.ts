@@ -18,14 +18,11 @@ let service: null | Interpreter<
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	const machine = createExtensionMachine({
-		context,
 		workspaceConfig: vscode.workspace.getConfiguration(),
 	});
 
 	service = interpret(machine)
 		.onTransition((state) => {
-			console.log('Entere state: ', state.value);
-
 			// Doing a mutable dance here because context.subscriptions is readonly and I'm not sure if re-assignment would break something
 			context.subscriptions.splice(0, context.subscriptions.length);
 			state.context.subscriptions.forEach((subscription) => {
